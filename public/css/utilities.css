@@ -1,0 +1,114 @@
+@import url('variables.css');
+
+/* Text */
+.italic {
+    font-style: italic;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-lg {
+    font-size: 1.3em;
+}
+
+/* Buttons */
+.button {
+    display: block;
+    width: fit-content;
+    padding: 0.5rem 0.75rem;
+    border: 2px solid black;
+    border-radius: 10px;
+    background-color: var(--terciary);
+    outline: none;
+    box-shadow: 5px 5px 0 #00000080;
+    cursor: pointer;
+    transition: scale 0.2s;
+    font-size: 0.95rem;
+}
+
+.button:hover {
+    scale: 1.05;
+}
+
+
+/* Form classes */
+.form {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: start;
+    gap: 2.5rem;
+}
+
+.form__title {
+    align-self: center;
+    font-size: 1.75rem;
+    text-align: center;
+}
+
+.form__main {
+    width: 100%;
+    margin-top: 0.5rem;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 2.5rem;
+}
+
+.form__entry {
+    width: 100%;
+    height: fit-content;
+    position: relative;
+}
+
+.form__label {
+    position: absolute;
+    top: 0.6rem;
+    left: 0.6rem;
+    transition: all 0.3s;
+    font-weight: bold;
+}
+
+.form__input, .form__textarea {
+    width: 100%;
+    padding: 0.6rem;
+    border: 2px solid black;
+    border-radius: 10px;
+    outline-style: none;
+    box-shadow: 5px 5px 0 #00000080;
+    font-size: 1rem;
+}
+
+.form__textarea {
+    height: 10rem;
+    resize: none;
+}
+
+.form__input:focus, .form__textarea:focus {
+    border-color: #0000FF;
+}
+
+.form__input:focus + .form__label,
+.form__input:not(:placeholder-shown) + .form__label,
+.form__textarea:focus + .form__label,
+.form__textarea:not(:placeholder-shown) + .form__label {
+    top: -1.6rem;
+    left: 0;
+}
+
+.form__options {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+/* Others */
+
+.division {
+    width: 100%;
+    border-top: 2px solid black;
+}
