@@ -95,7 +95,8 @@
     background: radial-gradient(#D5D5D5, #818181);
     border-radius: 50%;
     position: relative;
-    /* animation: spining 12s infinite linear; */
+    /* animation: spining 20s infinite linear; */
+    overflow: hidden;
 }
 
 .wheel__option {
