@@ -7,25 +7,53 @@ class Roulette {
         '#21D8E7', '#95EE96', '#FFB97A', '#E77AFF', '#A5869C']
     #currentOptions = []
 
-    #round(number) {
-        return Math.round(number * 100) / 100
+    #getTextDimensions(optDim) {
+        const { radius, centralPoint, unionPoint } = optDim
+
+        // Calculate top and left values in pixels
+        const top = radius - Math.abs(unionPoint[1] - centralPoint[1]) / 2
+        const left = radius + Math.abs(unionPoint[0] - centralPoint[0]) / 2
+
+        // Calculate the rotation angle (in degrees)
+        const slope = (unionPoint[1] - centralPoint[1]) / (unionPoint[0] - centralPoint[0])
+        const angle = Math.atan(slope)  // Return the angle in radians
+        const rotate = angle * 180 / Math.PI  // Transform to degrees
+
+        return {
+            left,
+            top,
+            rotate
+        }
     }
 
-    #getPath(angle) {
-        // Get the diameter and radius
-        const diameter = this.#$roulette.getBoundingClientRect().width
-        const radius = this.#round(diameter / 2)
+    #generatePath(dimensions) {
+        // Get the dimension
+        const { radius, initialPoint, centralPoint, finalPoint, unionPoint } = dimensions
 
         // Define the arch path properties
-        let archProperties = `${radius} ${radius} 0 0 1`
+        const archProperties = `${radius} ${radius} 0 0 1`
+
+        // Define and return the path
+        let path = `M ${initialPoint[0]} ${initialPoint[1]}` +
+            `A ${archProperties} ${unionPoint[0]} ${unionPoint[1]}` +
+            `A ${archProperties} ${finalPoint[0]} ${finalPoint[1]}` +
+            `L ${centralPoint[0]} ${centralPoint[1]} Z`
+
+        return path
+    }
+
+    #getOptionDimensions(angle) {
+        // Get the diameter and radius
+        const diameter = this.#$roulette.getBoundingClientRect().width
+        const radius = diameter / 2
 
         // Setting the four points (defined with '[x, y]')
-        let pointInitial, pointCentral, pointFinal, pointUnion
+        let initialPoint, centralPoint, finalPoint, unionPoint
         let isAcute, isObtuse, unionAngle
 
         // Set initial and central points
-        pointInitial = [radius, 0]
-        pointCentral = [radius, radius]
+        initialPoint = [radius, 0]
+        centralPoint = [radius, radius]
 
         // Get the union angle
         unionAngle = 90 - angle + (angle / 2)
@@ -41,63 +69,64 @@ class Roulette {
 
         if (isAcute || isObtuse) {
             // Change angles to radians (JS works with radians)
-            angle = this.#round(angle * Math.PI / 180)
-            unionAngle = this.#round(unionAngle * Math.PI / 180)
+            angle = angle * Math.PI / 180
+            unionAngle = unionAngle * Math.PI / 180
 
             // Calculation of trigonometric functions to obtain the points
             const radCos = radius * Math.cos(angle)
             const radSin = radius * Math.sin(angle)
-            const unRadCos = radius * Math.cos(unionAngle)
-            const unRadSin = radius * Math.sin(unionAngle)
 
+            // Obtain the final point
             if (isAcute) {
-                pointFinal = [
-                    this.#round(radius + radCos),
-                    this.#round(radius - radSin)
+                finalPoint = [
+                    radius + radCos,
+                    radius - radSin
                 ]
             } else {
-                pointFinal = [
-                    this.#round(radius + radSin),
-                    this.#round(radius + radCos)
+                finalPoint = [
+                    radius + radSin,
+                    radius + radCos
                 ]
             }
 
-            pointUnion = [
-                this.#round(radius + unRadCos),
-                this.#round(radius - unRadSin)
+            // Obtain the union point
+            const unRadCos = radius * Math.cos(unionAngle)
+            const unRadSin = radius * Math.sin(unionAngle)
+            unionPoint = [
+                radius + unRadCos,
+                radius - unRadSin
             ]
         } else {  // Straight angle
-            pointFinal = [radius, diameter]
-            pointUnion = [diameter, radius]
+            finalPoint = [radius, diameter]
+            unionPoint = [diameter, radius]
         }
 
-        // Return the path
-        let path = `
-            M ${pointInitial[0]} ${pointInitial[1]}
-            A ${archProperties} ${pointUnion[0]} ${pointUnion[1]}
-            A ${archProperties} ${pointFinal[0]} ${pointFinal[1]}
-            L ${pointCentral[0]} ${pointCentral[1]}
-            Z
-        `.replace(/\s+/g, ' ').trim()
-
-        return path
-    }
-
-    #clearRoullette() {
-        this.#$roulette.innerHTML = ""
+        return {
+            radius,
+            initialPoint,
+            centralPoint,
+            finalPoint,
+            unionPoint
+        }
     }
 
     #showOptions() {
         // Clear the old options
-        this.#clearRoullette()
+        this.#$roulette.innerHTML = ""
 
         // Get the options length
         const options = this.#currentOptions.length
 
-        // Set the path and degrees by option
-        let rotation = 360 / options  // Rotation by option
-        let path = this.#getPath(rotation)
-        rotation = this.#round(rotation)
+        // Set rotation by option
+        const rotation = 360 / options
+
+        // If there is more than one option obtain dimensions and set path
+        let path, optDim, textDim
+        if (rotation != 360) {
+            optDim = this.#getOptionDimensions(rotation)
+            path = this.#generatePath(optDim)
+            textDim = this.#getTextDimensions(optDim)
+        }
 
         // Color properties
         const colorsLen = this.#colors.length
@@ -113,16 +142,16 @@ class Roulette {
             const $optionP = $optionCopy.querySelector('p')
 
             // Set the color of the option
-            // Condition for not setting two consecutive colors
+            //--Condition for not setting two consecutive colors
             if (i + 1 == options && color == 0) color = 1
             $optionCopy.style.backgroundColor = this.#colors[color++]
             color = (color == colorsLen) ? 0 : color
 
-            // Add the text to the option
-            // $optionP.innerText = text
-
             // Set the size and text position
             if (rotation == 360) {  // There is only one option
+                // Add the text to the option 'p'
+                $optionP.innerText = text
+
                 // Set the text in the center
                 $optionP.style.top = '50%'
                 $optionP.style.left = '50%'
@@ -130,6 +159,18 @@ class Roulette {
             } else {  // Two or more options
                 // Set the clip path
                 $optionCopy.style.clipPath = `path("${path}")`
+
+                // Set the text in the option
+                //--Add the text to the option 'p'
+                $optionP.innerText = text
+
+                //--Put the text according to its dimensions
+                $optionP.style.top = `${textDim['top']}px`
+                $optionP.style.left = `${textDim['left']}px`
+                $optionP.style.translate = '-50% -50%'
+
+                //--Rotate the text according to the option size
+                $optionP.style.rotate = `${textDim['rotate']}deg`
 
                 // Rotate the option
                 $optionCopy.style.rotate = `${rotation * i}deg`
@@ -142,7 +183,7 @@ class Roulette {
 
     constructor() {
         // Add the first five options
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 3; i++) {
             const text = `Opción #${i + 1}`
 
             // Add the option to the textarea
