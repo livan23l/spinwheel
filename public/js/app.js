@@ -4,7 +4,7 @@ class Roulette {
     #$optionTemplate = document.querySelector('#template-wheel-option').content
     #colors = [
         '#EB6F6F', '#85E485', '#4B71EE', '#DC9332', '#AF32DC',
-        '#21D8E7', '#95EE96', '#FFB97A', '#E77AFF', '#A5869C']
+        '#21D8E7', '#BBF1BB', '#FFB97A', '#E77AFF', '#A5869C']
     #currentOptions = []
 
     #getTextDimensions(optDim) {
@@ -44,7 +44,7 @@ class Roulette {
 
     #getOptionDimensions(angle) {
         // Get the diameter and radius
-        const diameter = this.#$roulette.getBoundingClientRect().width
+        const diameter = this.#$roulette.clientWidth
         const radius = diameter / 2
 
         // Setting the four points (defined with '[x, y]')
@@ -152,6 +152,9 @@ class Roulette {
                 // Add the text to the option 'p'
                 $optionP.innerText = text
 
+                // The 'p' element will have a 100% width
+                $optionP.style.width = "100%"
+
                 // Set the text in the center
                 $optionP.style.top = '50%'
                 $optionP.style.left = '50%'
@@ -182,8 +185,8 @@ class Roulette {
     }
 
     constructor() {
-        // Add the first five options
-        for (let i = 0; i < 3; i++) {
+        // Add the first options
+        for (let i = 0; i < 5; i++) {
             const text = `Opción #${i + 1}`
 
             // Add the option to the textarea
@@ -196,7 +199,19 @@ class Roulette {
         // Show all the options
         this.#showOptions()
 
-        window.addEventListener("resize", () => {
+        // Event when the user change the content of the textarea
+        this.#$textarea.addEventListener('input', () => {
+            // Get the options of the textarea
+            const lines = this.#$textarea.value.split('\n')
+                .map(line => line.trim())  // Trim every line
+                .filter(line => line)  // Filter to get only truthy values
+
+            this.#currentOptions = lines
+            this.#showOptions()
+        })
+
+        // Adjust the roulette when the window resizes
+        window.addEventListener('resize', () => {
             this.#showOptions()
         })
     }
