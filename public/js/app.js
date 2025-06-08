@@ -201,13 +201,21 @@ class Roulette {
 
         // Event when the user change the content of the textarea
         this.#$textarea.addEventListener('input', () => {
+            // To fix the scroll move on firefox
+            const scrollY = window.scrollY
+
             // Get the options of the textarea
             const lines = this.#$textarea.value.split('\n')
                 .map(line => line.trim())  // Trim every line
                 .filter(line => line)  // Filter to get only truthy values
-
+            // Put the options in the roulette
             this.#currentOptions = lines
             this.#showOptions()
+
+            // Put the scroll where it was before if it's firefox
+            if (navigator.userAgent.toLowerCase().includes('firefox')) {
+                window.scrollTo(0, scrollY)
+            }
         })
 
         // Adjust the roulette when the window resizes

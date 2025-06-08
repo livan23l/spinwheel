@@ -75,6 +75,7 @@
     aspect-ratio: 1/1;
     width: min(25rem, 80%);
     position: relative;
+    overflow: hidden;
 }
 
 .wheel__roulette::after {
@@ -114,7 +115,7 @@
 
 .wheel__text {
     width: 50%;
-    padding-inline: 0.5rem;
+    padding-inline: 0.75rem;
     position: absolute;
     font-size: 1.5rem;
     text-align: center;
