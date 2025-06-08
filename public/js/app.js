@@ -1,69 +1,182 @@
 class Roulette {
-    #$roulette = document.querySelector('#roulette')
-    #$textarea = document.querySelector('#wheel-textarea')
+    #$roulette = document.querySelector('#roulette')  // DOM roulette
+    #$textarea = document.querySelector('#wheel-textarea')  // DOM textarea
     #$optionTemplate = document.querySelector('#template-wheel-option').content
-    #colors = ['#EB6F6F', '#85E485', '#4B71EE', '#DC9332', '#AF32DC']
+    #colors = [
+        '#EB6F6F', '#85E485', '#4B71EE', '#DC9332', '#AF32DC',
+        '#21D8E7', '#BBF1BB', '#FFB97A', '#E77AFF', '#A5869C']
     #currentOptions = []
-    
-    #showOptions() {
-        // Get the amount of options
-        const optionsLen = this.#currentOptions.length
 
-        // Position and size properties
-        const totalSize = this.#$roulette.getBoundingClientRect().width
-        const halfSize = Math.floor(totalSize / 2)
-        let optionsPercent = Math.floor(100 / optionsLen)
-        let x = halfSize
-        let y = 0
+    #getTextDimensions(optDim) {
+        const { radius, centralPoint, unionPoint } = optDim
+
+        // Calculate top and left values in pixels
+        const top = radius - Math.abs(unionPoint[1] - centralPoint[1]) / 2
+        const left = radius + Math.abs(unionPoint[0] - centralPoint[0]) / 2
+
+        // Calculate the rotation angle (in degrees)
+        const slope = (unionPoint[1] - centralPoint[1]) / (unionPoint[0] - centralPoint[0])
+        const angle = Math.atan(slope)  // Return the angle in radians
+        const rotate = angle * 180 / Math.PI  // Transform to degrees
+
+        return {
+            left,
+            top,
+            rotate
+        }
+    }
+
+    #generatePath(dimensions) {
+        // Get the dimension
+        const { radius, initialPoint, centralPoint, finalPoint, unionPoint } = dimensions
+
+        // Define the arch path properties
+        const archProperties = `${radius} ${radius} 0 0 1`
+
+        // Define and return the path
+        let path = `M ${initialPoint[0]} ${initialPoint[1]}` +
+            `A ${archProperties} ${unionPoint[0]} ${unionPoint[1]}` +
+            `A ${archProperties} ${finalPoint[0]} ${finalPoint[1]}` +
+            `L ${centralPoint[0]} ${centralPoint[1]} Z`
+
+        return path
+    }
+
+    #getOptionDimensions(angle) {
+        // Get the diameter and radius
+        const diameter = this.#$roulette.clientWidth
+        const radius = diameter / 2
+
+        // Setting the four points (defined with '[x, y]')
+        let initialPoint, centralPoint, finalPoint, unionPoint
+        let isAcute, isObtuse, unionAngle
+
+        // Set initial and central points
+        initialPoint = [radius, 0]
+        centralPoint = [radius, radius]
+
+        // Get the union angle
+        unionAngle = 90 - angle + (angle / 2)
+
+        // Verify if it's an acute angle
+        isAcute = angle < 90
+        isObtuse = angle < 180
+        if (isAcute) {
+            angle = 90 - angle
+        } else if (isObtuse) {
+            angle = 180 - angle
+        }
+
+        if (isAcute || isObtuse) {
+            // Change angles to radians (JS works with radians)
+            angle = angle * Math.PI / 180
+            unionAngle = unionAngle * Math.PI / 180
+
+            // Calculation of trigonometric functions to obtain the points
+            const radCos = radius * Math.cos(angle)
+            const radSin = radius * Math.sin(angle)
+
+            // Obtain the final point
+            if (isAcute) {
+                finalPoint = [
+                    radius + radCos,
+                    radius - radSin
+                ]
+            } else {
+                finalPoint = [
+                    radius + radSin,
+                    radius + radCos
+                ]
+            }
+
+            // Obtain the union point
+            const unRadCos = radius * Math.cos(unionAngle)
+            const unRadSin = radius * Math.sin(unionAngle)
+            unionPoint = [
+                radius + unRadCos,
+                radius - unRadSin
+            ]
+        } else {  // Straight angle
+            finalPoint = [radius, diameter]
+            unionPoint = [diameter, radius]
+        }
+
+        return {
+            radius,
+            initialPoint,
+            centralPoint,
+            finalPoint,
+            unionPoint
+        }
+    }
+
+    #showOptions() {
+        // Clear the old options
+        this.#$roulette.innerHTML = ""
+
+        // Get the options length
+        const options = this.#currentOptions.length
+
+        // Set rotation by option
+        const rotation = 360 / options
+
+        // If there is more than one option obtain dimensions and set path
+        let path, optDim, textDim
+        if (rotation != 360) {
+            optDim = this.#getOptionDimensions(rotation)
+            path = this.#generatePath(optDim)
+            textDim = this.#getTextDimensions(optDim)
+        }
 
         // Color properties
         const colorsLen = this.#colors.length
         let color = 0;
 
-
-        for (let i = 0; i < optionsLen; i++) {
+        // Set all the options
+        for (let i = 0; i < options; i++) {
             // Get the current option text
             const text = this.#currentOptions[i]
 
-            // Create the option copy and get the 'p' element
+            // Create the an option copy and get the 'p' element
             const $optionCopy = this.#$optionTemplate.cloneNode(true).querySelector('div')
             const $optionP = $optionCopy.querySelector('p')
 
             // Set the color of the option
+            //--Condition for not setting two consecutive colors
+            if (i + 1 == options && color == 0) color = 1
             $optionCopy.style.backgroundColor = this.#colors[color++]
             color = (color == colorsLen) ? 0 : color
 
-            // Add the text to the option
-            $optionP.innerText = text
-
             // Set the size and text position
-            if (optionsPercent == 100) {
+            if (rotation == 360) {  // There is only one option
+                // Add the text to the option 'p'
+                $optionP.innerText = text
+
+                // The 'p' element will have a 100% width
+                $optionP.style.width = "100%"
+
                 // Set the text in the center
                 $optionP.style.top = '50%'
                 $optionP.style.left = '50%'
                 $optionP.style.translate = '-50% -50%'
-            } else {
-                let path, pointA, pointB, pointC, size
-                size = `${halfSize / 2} ${halfSize / 2} 0 0 1`
-
-                // Define the points
-                if (i == 0) {
-                    pointA = `${halfSize} 0`
-                    pointB = `${totalSize} ${halfSize}`
-                    pointC = `${halfSize} ${totalSize}`
-
-                    path = `M ${pointA} A ${size} ${pointB} A ${size} ${pointC} Z`
-                } else {
-                    pointA = `${halfSize} ${totalSize}`
-                    pointB = `0 ${halfSize}`
-                    pointC = `${halfSize} 0`
-
-                    path = `M ${pointA} A ${size} ${pointB} A ${size} ${pointC} Z`
-                }
-
+            } else {  // Two or more options
                 // Set the clip path
-                console.log(path)
                 $optionCopy.style.clipPath = `path("${path}")`
+
+                // Set the text in the option
+                //--Add the text to the option 'p'
+                $optionP.innerText = text
+
+                //--Put the text according to its dimensions
+                $optionP.style.top = `${textDim['top']}px`
+                $optionP.style.left = `${textDim['left']}px`
+                $optionP.style.translate = '-50% -50%'
+
+                //--Rotate the text according to the option size
+                $optionP.style.rotate = `${textDim['rotate']}deg`
+
+                // Rotate the option
+                $optionCopy.style.rotate = `${rotation * i}deg`
             }
 
             // Add the option to the roulette
@@ -72,9 +185,9 @@ class Roulette {
     }
 
     constructor() {
-        // Add the first five options
-        for (let i = 1; i < 3; i++) {
-            const text = `Opción #${i}`
+        // Add the first options
+        for (let i = 0; i < 5; i++) {
+            const text = `Opción #${i + 1}`
 
             // Add the option to the textarea
             this.#$textarea.textContent += `${text}\n`
@@ -85,9 +198,25 @@ class Roulette {
 
         // Show all the options
         this.#showOptions()
+
+        // Event when the user change the content of the textarea
+        this.#$textarea.addEventListener('input', () => {
+            // Get the options of the textarea
+            const lines = this.#$textarea.value.split('\n')
+                .map(line => line.trim())  // Trim every line
+                .filter(line => line)  // Filter to get only truthy values
+
+            this.#currentOptions = lines
+            this.#showOptions()
+        })
+
+        // Adjust the roulette when the window resizes
+        window.addEventListener('resize', () => {
+            this.#showOptions()
+        })
     }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     new Roulette()
 })

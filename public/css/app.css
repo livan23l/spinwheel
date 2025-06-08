@@ -95,7 +95,12 @@
     background: radial-gradient(#D5D5D5, #818181);
     border-radius: 50%;
     position: relative;
-    /* animation: spining 12s infinite linear; */
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.roulette--spining {
+    animation: spining 20s infinite linear;
 }
 
 .wheel__option {
@@ -108,8 +113,15 @@
 }
 
 .wheel__text {
+    width: 50%;
+    padding-inline: 0.5rem;
     position: absolute;
     font-size: 1.5rem;
+    text-align: center;
+    white-space: nowrap;
+    user-select: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .wheel__textarea {
