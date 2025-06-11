@@ -4,16 +4,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="public/css/app.css">
   <title data-translate="Roulette">Roulette</title>
-  <script type="module" src="public/js/app.js"></script>
   <link rel="icon" type="image/webp" href="public/img/favicon.webp">
+  <link rel="stylesheet" href="public/css/app.css">
+  <script type="module" src="public/js/app.js"></script>
 </head>
 
 <body class="page">
   <!-- Templates -->
   <template id="template-wheel-option">
-    <div class="wheel__option"><p class="wheel__text"></p></div>
+    <div class="wheel__option">
+      <p class="wheel__text"></p>
+    </div>
   </template>
 
   <!-- Header -->
@@ -50,17 +52,21 @@
       <div class="instructions__main">
         <p class="instructions__p">
           <span class="text-lg bold">1.</span>
-          <span data-translate="Add, remove, or modify the options you want in the white box.">Add, remove, or modify the options you want in the white box.</span>
+          <span data-translate="Add, remove, or modify the options you want in the white box.">Add, remove, or modify
+            the options you want in the white box.</span>
         </p>
         <p class="instructions__p">
           <span class="text-lg bold">2.</span>
-          <span data-translate="Click on the wheel to start it spinning.">Click on the wheel to start it spinning.</span>
+          <span data-translate="Click on the wheel to start it spinning.">Click on the wheel to start it
+            spinning.</span>
         </p>
         <p class="instructions__p">
           <span class="text-lg bold">3.</span>
-          <span data-translate="An option will be randomly selected and displayed on the screen.">An option will be randomly selected and displayed on the screen.</span>
+          <span data-translate="An option will be randomly selected and displayed on the screen.">An option will be
+            randomly selected and displayed on the screen.</span>
         </p>
-        <p class="text-center"><a href="https://github.com/livan23l/spinwheel" target="_blank" data-translate="View on GitHub">View on GitHub</a></p>
+        <p class="text-center"><a href="https://github.com/livan23l/spinwheel" target="_blank"
+            data-translate="View on GitHub">View on GitHub</a></p>
       </div>
     </section>
 
@@ -72,8 +78,9 @@
   <div id="backdrop" class="backdrop backdrop--hidden"></div>
   <dialog id="selection" class="selection">
     <button id="selection-close" class="selection__icon">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
         <path d="M8.56 3.69a9 9 0 0 0 -2.92 1.95" />
         <path d="M3.69 8.56a9 9 0 0 0 -.69 3.44" />
         <path d="M3.69 15.44a9 9 0 0 0 1.95 2.92" />
@@ -89,7 +96,8 @@
     <div class="selection__content">
       <h3 class="selection__title" data-translate="Selected option">Selected option</h3>
       <p class="selection__text" id="selection-text"></p>
-      <button id="selection-delete" data-option="" class="button center" data-translate="Remove option">Remove option</button>
+      <button id="selection-delete" data-option="" class="button center" data-translate="Remove option">Remove
+        option</button>
     </div>
   </dialog>
 
@@ -97,25 +105,33 @@
   <footer class="footer">
     <!-- Contact form -->
     <div class="contact">
-      <form class="form" action="">
+      <!-- Form Alert -->
+      <div class="contact__alert contact__alert--hidden contact__alert--success">
+        <p data-translate="The form has been submitted successfully">The form has been submitted successfully</p>
+      </div>
+      <div class="contact__alert contact__alert--hidden contact__alert--error">
+        <p data-translate="There was an error submitting the form">There was an error submitting the form</p>
+      </div>
+
+      <form id="contact" class="form">
         <!-- Form title -->
         <h2 class="form__title" data-translate="Do you want to contact me?">Do you want to contact me?</h2>
 
         <!-- Form questions -->
         <div class="form__main">
           <div class="form__entry">
-            <input class="form__input" type="email" name="email" id="email" placeholder="">
+            <input id="email" class="form__input" type="email" name="email" placeholder="" required>
             <label class="form__label" for="email" data-translate="Email">Email</label>
           </div>
           <div class="form__entry">
-            <textarea class="form__textarea" name="message" id="message" placeholder=""></textarea>
+            <textarea id="message" class="form__textarea" name="message" placeholder="" required minlength="20"></textarea>
             <label class="form__label" for="email" data-translate="Message">Message</label>
           </div>
         </div>
 
         <!-- Submit button -->
         <div class="form__options">
-          <button class="button" type="submit" data-translate="Send">Send</button>
+          <button id="contact-button" class="button" type="submit" data-translate="Send">Send</button>
         </div>
       </form>
     </div>
