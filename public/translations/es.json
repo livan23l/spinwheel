@@ -12,5 +12,7 @@
     "Send": "Enviar",
     "Created by:": "Creado por:",
     "Selected option": "Opción seleccionada",
-    "Remove option": "Borrar opción"
+    "Remove option": "Borrar opción",
+    "The form has been submitted successfully": "Se ha enviado correctamente el formulario",
+    "There was an error submitting the form": "Hubo un error al enviar el formulario"
 }
