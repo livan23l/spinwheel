@@ -1,5 +1,5 @@
 # SPIN WHEEl
-https://spinwheel.devfs.net
+https://www.spinwheel.devfs.net
 <img src="./public/img/page.webp">
 
 ## English
