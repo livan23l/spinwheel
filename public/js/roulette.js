@@ -3,13 +3,13 @@ class Roulette {
     #$textarea = document.querySelector('#wheel-textarea')  // DOM textarea
     #$backdrop = document.querySelector('#backdrop')  // DOM backdrop
     #$selection = document.querySelector('#selection')  // DOM selection
-    #$audio = new Audio('./public/sound/bip.wav')
     #$optionTemplate = document.querySelector('#template-wheel-option').content
     #colors = [
         '#EB6F6F', '#85E485', '#4B71EE', '#DC9332', '#AF32DC',
         '#21D8E7', '#BBF1BB', '#FFB97A', '#E77AFF', '#A5869C']
     #currentOptions = []
     #isSpining = false
+    #audio
 
     #getTextDimensions(optDim) {
         const { radius, centralPoint, unionPoint } = optDim
@@ -211,8 +211,8 @@ class Roulette {
     }
 
     #playSound() {
-        this.#$audio.currentTime = 0
-        this.#$audio.play()
+        this.#audio.currentTime = 0
+        this.#audio.play()
     }
 
     #spinRoulette() {
@@ -387,6 +387,9 @@ class Roulette {
             // Add the option to the current options
             this.#currentOptions.push(text)
         }
+
+        // Get the audio effect
+        this.#audio = new Audio('./public/sound/bip.wav')
 
         // Show all the options
         this.#showOptions()
