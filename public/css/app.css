@@ -35,18 +35,23 @@
     gap: 0.75rem;
 }
 
-.languages__opgion {
+.languages__option {
+    aspect-ratio: 1;
     width: 50%;
-    background-color: transparent;
-    border-style: none;
     cursor: pointer;
+    border-style: none;
     border-radius: 50%;
-    box-shadow: 3px 3px 0 #00000080;
+    box-shadow: 3px 3px 0 #00000090;
+    position: relative;
 }
 
 .languages__img {
     min-width: 0;
     max-width: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 
@@ -206,8 +211,8 @@
 }
 
 .selection__icon {
-    aspect-ratio: 1;
     width: 2rem;
+    height: 2rem;
     padding: 0.2rem;
     border-style: none;
     border-radius: 50%;

@@ -5,8 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="public/css/app.css">
-  <title>Gira la ruleta</title>
-  <script defer src="public/js/app.js"></script>
+  <title data-translate="Roulette">Roulette</title>
+  <script type="module" src="public/js/app.js"></script>
 </head>
 
 <body class="page">
@@ -17,14 +17,14 @@
 
   <!-- Header -->
   <header class="header">
-    <h1 class="header__title">Gira la ruleta</h1>
+    <h1 class="header__title" data-translate="Spin the wheel">Spin the wheel</h1>
 
     <!-- Language settings -->
-    <div class="languages">
-      <button data-action="spanish" class="languages__opgion">
+    <div id="languages" class="languages">
+      <button data-language="es" class="languages__option">
         <img class="languages__img" src="./public/img/spanish.webp" alt="Mexico flag">
       </button>
-      <button data-action="english" class="languages__opgion">
+      <button data-language="en" class="languages__option">
         <img class="languages__img" src="./public/img/english.webp" alt="USA flag">
       </button>
     </div>
@@ -45,21 +45,21 @@
     </section>
 
     <section class="instructions">
-      <h2 class="instructions__title">Instrucciones</h2>
+      <h2 class="instructions__title" data-translate="Instructions">Instructions</h2>
       <div class="instructions__main">
         <p class="instructions__p">
-          <span class="text-lg bold">1.</span> Agrega, elimina o modifica las
-          opciones que desees en el recuadro blanco.
+          <span class="text-lg bold">1.</span>
+          <span data-translate="Add, remove, or modify the options you want in the white box.">Add, remove, or modify the options you want in the white box.</span>
         </p>
         <p class="instructions__p">
-          <span class="text-lg bold">2.</span> Haz un click encima de la ruleta
-          para que esta empiece a girar. 
+          <span class="text-lg bold">2.</span>
+          <span data-translate="Click on the wheel to start it spinning.">Click on the wheel to start it spinning.</span>
         </p>
         <p class="instructions__p">
-          <span class="text-lg bold">3.</span> De manera aleatoria se
-          seleccionará una opción y se mostrará en pantalla.
+          <span class="text-lg bold">3.</span>
+          <span data-translate="An option will be randomly selected and displayed on the screen.">An option will be randomly selected and displayed on the screen.</span>
         </p>
-        <p class="text-center"><a href="https://github.com/livan23l/spinwheel" target="_blank">Ver proyecto en GitHub</a></p>
+        <p class="text-center"><a href="https://github.com/livan23l/spinwheel" target="_blank" data-translate="View on GitHub">View on GitHub</a></p>
       </div>
     </section>
 
@@ -86,9 +86,9 @@
       </svg>
     </button>
     <div class="selection__content">
-      <h3 class="selection__title">Opción seleccionada</h3>
+      <h3 class="selection__title" data-translate="Selected option">Selected option</h3>
       <p class="selection__text" id="selection-text"></p>
-      <button id="selection-delete" data-option="" class="button center">Borrar opción</button>
+      <button id="selection-delete" data-option="" class="button center" data-translate="Remove option">Remove option</button>
     </div>
   </dialog>
 
@@ -98,29 +98,32 @@
     <div class="contact">
       <form class="form" action="">
         <!-- Form title -->
-        <h2 class="form__title">¿Quieres contactarme?</h2>
+        <h2 class="form__title" data-translate="Do you want to contact me?">Do you want to contact me?</h2>
 
         <!-- Form questions -->
         <div class="form__main">
           <div class="form__entry">
             <input class="form__input" type="email" name="email" id="email" placeholder="">
-            <label class="form__label" for="email">Correo</label>
+            <label class="form__label" for="email" data-translate="Email">Email</label>
           </div>
           <div class="form__entry">
             <textarea class="form__textarea" name="message" id="message" placeholder=""></textarea>
-            <label class="form__label" for="email">Mensaje</label>
+            <label class="form__label" for="email" data-translate="Message">Message</label>
           </div>
         </div>
 
         <!-- Submit button -->
         <div class="form__options">
-          <button class="button" type="submit">Enviar</button>
+          <button class="button" type="submit" data-translate="Send">Send</button>
         </div>
       </form>
     </div>
 
     <!-- Credits -->
-    <p class="text-center italic">Creado por: <span class="bold">Iván Alfredo López Barrera</span></p>
+    <p class="text-center">
+      <span class="italic" data-translate="Created by:">Created by:</span>
+      <span class="bold">Iván Alfredo López Barrera</span>
+    </p>
   </footer>
 </body>
 

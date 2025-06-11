@@ -115,6 +115,7 @@
 
 .backdrop {
     position: fixed;
+    z-index: 9;
     inset: 0;
     background-color: #00000080;
     backdrop-filter: blur(3px);
