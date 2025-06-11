@@ -26,9 +26,9 @@
     border-radius: 10px;
     background-color: var(--terciary);
     outline: none;
-    box-shadow: 5px 5px 0 #00000080;
+    box-shadow: 3px 3px 0 #00000080;
     cursor: pointer;
-    transition: scale 0.2s;
+    transition: scale 0.8s;
     font-size: 0.95rem;
 }
 
@@ -111,4 +111,22 @@
 .division {
     width: 100%;
     border-top: 2px solid black;
+}
+
+.backdrop {
+    position: fixed;
+    inset: 0;
+    background-color: #00000080;
+    backdrop-filter: blur(3px);
+    transition: opacity 0.35s;
+    cursor: alias;
+}
+
+.backdrop--hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.center {
+    margin: 0 auto;
 }
