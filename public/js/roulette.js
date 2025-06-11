@@ -3,6 +3,7 @@ class Roulette {
     #$textarea = document.querySelector('#wheel-textarea')  // DOM textarea
     #$backdrop = document.querySelector('#backdrop')  // DOM backdrop
     #$selection = document.querySelector('#selection')  // DOM selection
+    #$audio = new Audio('./public/sound/bip.wav')
     #$optionTemplate = document.querySelector('#template-wheel-option').content
     #colors = [
         '#EB6F6F', '#85E485', '#4B71EE', '#DC9332', '#AF32DC',
@@ -209,6 +210,11 @@ class Roulette {
         })
     }
 
+    #playSound() {
+        this.#$audio.currentTime = 0
+        this.#$audio.play()
+    }
+
     #spinRoulette() {
         // This function will be executed when the spins end
         const endOfSpin = (option) => {
@@ -290,6 +296,9 @@ class Roulette {
             if (finalDeg >= 360) finalDeg -= 360
             if (angle >= 360) angle -= 360
 
+            // Validate the last option to play the sound
+            let lastOpt = Math.floor(angle / optionDegrees)
+
             const spin = () => {
                 if (velocity <= 0) {
                     endOfSpin(option)
@@ -300,6 +309,13 @@ class Roulette {
                 angle += velocity
                 if (angle >= 360) angle -= 360
                 this.#$roulette.style.rotate = `${angle}deg`
+
+                // Plays the sound if any option has already passed
+                const currOpt = Math.floor(angle / optionDegrees)
+                if (currOpt != lastOpt) {
+                    lastOpt = currOpt
+                    this.#playSound()
+                }
 
                 // Increase or decrease the velocity
                 if (isAccelerating) {
