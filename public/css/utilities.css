@@ -113,6 +113,14 @@
     border-top: 2px solid black;
 }
 
+.hidden {
+    display: none;
+}
+
+.center {
+    margin: 0 auto;
+}
+
 .backdrop {
     position: fixed;
     z-index: 9;
@@ -126,8 +134,4 @@
 .backdrop--hidden {
     opacity: 0;
     visibility: hidden;
-}
-
-.center {
-    margin: 0 auto;
 }
