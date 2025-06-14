@@ -30,6 +30,7 @@
     cursor: pointer;
     transition: scale 0.8s;
     font-size: 0.95rem;
+    color: black;
 }
 
 .button:hover {

@@ -211,7 +211,6 @@ class Roulette {
     }
 
     #playSound() {
-        this.#audio.currentTime = 0
         this.#audio.play()
     }
 
@@ -377,19 +376,22 @@ class Roulette {
     }
 
     constructor() {
+        // Remove the last textarea content
+        this.#$textarea.value = ''
+
         // Add the first options
         for (let i = 0; i < 5; i++) {
             const text = i + 1
 
             // Add the option to the textarea
-            this.#$textarea.textContent += `${text}\n`
+            this.#$textarea.value += `${text}\n`
 
             // Add the option to the current options
             this.#currentOptions.push(text)
         }
 
         // Get the audio effect
-        this.#audio = new Audio('./public/sound/bip.wav')
+        this.#audio = new Audio('./public/sound/bip.mp3')
 
         // Show all the options
         this.#showOptions()
